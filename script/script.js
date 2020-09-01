@@ -76,7 +76,7 @@ window.addEventListener('DOMContentLoaded',function(){
                 clearInterval(amimationInterval);                
             }
             popupContent.style.top=`${persent/5}%`;
-            console.log(popupContent.style.top);
+            
         }
         
         
