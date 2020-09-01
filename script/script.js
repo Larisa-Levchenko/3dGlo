@@ -83,8 +83,11 @@ window.addEventListener('DOMContentLoaded',function(){
         popupBtn.forEach((elem)=>{
             elem.addEventListener('click', ()=>{
                 popup.style.display='block';
-                amimationInterval = setInterval(animation, 10);
-                animation();
+                if(screen.width>768){
+                     amimationInterval = setInterval(animation, 10);
+                    animation();
+                }
+               
             });
         });
         popupClose.addEventListener('click',()=>{
