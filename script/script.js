@@ -45,20 +45,31 @@ window.addEventListener('DOMContentLoaded',function(){
 
     //меню
     const toggleMenu = () => {
-        const btnMenu = document.querySelector('.menu'),
-            menu = document.querySelector('menu');
+        const menu = document.querySelector('menu'),
+            main=document.querySelector('main');
             
+        
+         
         const hendlerMenu =()=>{
             menu.classList.toggle('active-menu');
         };
-        btnMenu.addEventListener('click', hendlerMenu);
-        menu.addEventListener('click',(event)=>{
-            let target=event.target;
-            if (!target.classList.contains('active-menu')){               
+        
+        document.body.addEventListener('click', (event)=>{
+            let target =event.target;            
+            if (target.closest('.menu') !== null) {
+                hendlerMenu();
+            }else{
+                if (target.closest('menu') === null && menu.classList.contains('active-menu')) {
+                    hendlerMenu();
+                }
+            }
+            if (target.closest('menu') !== null && !target.classList.contains('active-menu')) {
                 hendlerMenu();
             }
-        });        
-    };    
+                      
+        });
+    };   
+    
     toggleMenu();
 
     //popup
