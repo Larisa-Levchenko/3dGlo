@@ -46,10 +46,8 @@ window.addEventListener('DOMContentLoaded',function(){
     //меню
     const toggleMenu = () => {
         const menu = document.querySelector('menu'),
-            main=document.querySelector('main');
+            main=document.querySelector('main');   
             
-        
-         
         const hendlerMenu =()=>{
             menu.classList.toggle('active-menu');
         };
@@ -243,4 +241,33 @@ window.addEventListener('DOMContentLoaded',function(){
         StartPlaySlide();
     };
     slider();
+
+    //команда
+    const command =()=>{
+        const command = document.querySelector('.command');
+        let tmpImg;
+        command.addEventListener('mouseover', (event)=>{
+            tmpImg = event.target.src;
+            event.target.src=event.target.dataset.img;            
+        });
+
+        command.addEventListener('mouseout', (event) => {
+            event.target.dataset.img = event.target.src;
+            event.target.src = tmpImg;
+        });
+
+    };
+    command();
+    //калькулятор
+    const calc=()=>{
+        const calc = document.querySelector('.calc');
+        const inputCalc=calc.querySelectorAll('input');
+        inputCalc.forEach((item)=>{
+            item.addEventListener('input',()=>{
+                item.value = item.value.replace(/\D/g, '');
+            });
+        });
+
+    };
+    calc();
 });
