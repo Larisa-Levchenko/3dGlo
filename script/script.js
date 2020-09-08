@@ -273,16 +273,31 @@ window.addEventListener('DOMContentLoaded',function(){
         const calcDay = calcBlock.querySelector('.calc-day');
         const total = calcBlock.querySelector('#total');
 
+        let animation = 0;
+        let sum;
+
         inputCalc.forEach((item) => {
             item.addEventListener('input', () => {
                 item.value = item.value.replace(/\D/g, '');
             });
         });
 
+        const animationSum = () => {
+            if (total.textContent < sum) {
+                if ((+total.textContent + 100) > sum) {
+                    total.textContent = sum;
+                } else {
+                    total.textContent = +total.textContent + 100;
+                }
+                animation = window.requestAnimationFrame(animationSum);
+            }
+
+        };
+
         const countSum = () => {
             total.textContent = 0;
-            let typeValue = calcType.options[calcType.selectedIndex].value;
-            let squareValue = calcSquare.value,
+            let typeValue = calcType.options[calcType.selectedIndex].value,
+                squareValue = calcSquare.value,
                 countValue = 1,
                 dayValue = 1;
             if (calcCount.value > 1) {
@@ -294,7 +309,8 @@ window.addEventListener('DOMContentLoaded',function(){
                 dayValue *= 1.5;
             }
             if (!!typeValue && !!squareValue) {
-                total.textContent = parseInt(price * typeValue * squareValue * countValue * dayValue);
+                sum = parseInt(price * typeValue * squareValue * countValue * dayValue);                
+                animationSum();
             }
 
         };
