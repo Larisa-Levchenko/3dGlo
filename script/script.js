@@ -263,15 +263,49 @@ window.addEventListener('DOMContentLoaded',function(){
     };
     command();
     //калькулятор
-    const calc = () => {
-        const calc = document.querySelector('.calc');
-        const inputCalc = calc.querySelectorAll('input');
+    const calc = (price = 100) => {
+        const calcBlock = document.querySelector('.calc-block');
+        const inputCalc = calcBlock.querySelectorAll('input');
+
+        const calcType = calcBlock.querySelector('.calc-type');
+        const calcSquare = calcBlock.querySelector('.calc-square');
+        const calcCount = calcBlock.querySelector('.calc-count');
+        const calcDay = calcBlock.querySelector('.calc-day');
+        const total = calcBlock.querySelector('#total');
+
         inputCalc.forEach((item) => {
             item.addEventListener('input', () => {
                 item.value = item.value.replace(/\D/g, '');
             });
         });
 
+        const countSum = () => {
+            total.textContent = 0;
+            let typeValue = calcType.options[calcType.selectedIndex].value;
+            let squareValue = calcSquare.value,
+                countValue = 1,
+                dayValue = 1;
+            if (calcCount.value > 1) {
+                countValue += (calcCount.value - 1) / 10;
+            }
+            if (calcDay.value && calcDay.value < 5) {
+                dayValue *= 2;
+            } else if (calcDay.value && calcDay.value < 10) {
+                dayValue *= 1.5;
+            }
+            if (!!typeValue && !!squareValue) {
+                total.textContent = parseInt(price * typeValue * squareValue * countValue * dayValue);
+            }
+
+        };
+
+        calcBlock.addEventListener('change', () => {
+            if (event.target.matches('select') || event.target.matches('input')) {
+                countSum();
+            }
+        });
+
     };
+
     calc();
 });
