@@ -1,120 +1,158 @@
-window.addEventListener('DOMContentLoaded',function(){
+window.addEventListener('DOMContentLoaded', function () {
     'use strict';
     //таймер
-    function countTimer(deadline){
+    function countTimer(deadline) {
         let timerHours = document.querySelector('#timer-hours'),
             timerMinutes = document.querySelector('#timer-minutes'),
             timerSeconds = document.querySelector('#timer-seconds');
         let timeinterval;
-        
-        function getZero(n){
-            if(n<10){
-                n='0'+n;
+
+        function getZero(n) {
+            if (n < 10) {
+                n = '0' + n;
             }
             return n;
         }
 
-        function getTimeREmaining(){
+        function getTimeREmaining() {
             let dateStop = new Date(deadline).getTime(),
                 dateNow = new Date().getTime(),
                 timeRemaining = (dateStop - dateNow) / 1000,
                 seconds = Math.floor(timeRemaining % 60),
                 minutes = Math.floor((timeRemaining / 60) % 60),
                 hours = Math.floor(timeRemaining / 60 / 60) % 24;
-                return {timeRemaining,hours, minutes,seconds};
+            return {
+                timeRemaining,
+                hours,
+                minutes,
+                seconds
+            };
         }
-        function updateClock(){
-            let timer = getTimeREmaining();                    
-            if (timer.timeRemaining < 0){
+
+        function updateClock() {
+            let timer = getTimeREmaining();
+            if (timer.timeRemaining < 0) {
                 timerHours.textContent = '00';
                 timerMinutes.textContent = '00';
                 timerSeconds.textContent = '00';
                 clearInterval(timeinterval);
-            }else{
+            } else {
                 timerHours.textContent = getZero(timer.hours);
                 timerMinutes.textContent = getZero(timer.minutes);
                 timerSeconds.textContent = getZero(timer.seconds);
             }
-           
+
         }
-        timeinterval=setInterval(updateClock, 1000);
+        timeinterval = setInterval(updateClock, 1000);
         updateClock();
-            
-    }    
+
+    }
     countTimer('2 September 2020');
 
     //меню
     const toggleMenu = () => {
-        const menu = document.querySelector('menu'),
-            main=document.querySelector('main');   
+        const menu = document.querySelector('menu');
             
-        const hendlerMenu =()=>{
+        let top = 0,
+            blockTop,
+            animation;
+
+        const hendlerMenu = () => {
             menu.classList.toggle('active-menu');
         };
-        
-        document.body.addEventListener('click', (event)=>{
-            let target =event.target;            
+
+        const getAnimation = () =>{
+            if (top < blockTop) {
+                if ((top + 40) > blockTop) {
+                    top = blockTop;
+                } else {
+                    top = top+40;
+                    animation = window.requestAnimationFrame(getAnimation);
+                }                
+            }           
+            window.scrollTo(0, top);
+            
+        };
+
+        const getScroll = (event) => {
+            event.preventDefault();
+            const target = event.target.closest('a');           
+            const blockID = target.getAttribute('href').substr(1);            
+            const block = document.getElementById(blockID);
+            top = 0;
+            blockTop = block.getBoundingClientRect().top;
+            getAnimation();
+        };
+
+        document.body.addEventListener('click', (event) => {
+            let target = event.target;
             if (target.closest('.menu') !== null) {
                 hendlerMenu();
-            }else{
+            } else {
                 if (target.closest('menu') === null && menu.classList.contains('active-menu')) {
                     hendlerMenu();
                 }
             }
             if (target.closest('menu') !== null && !target.classList.contains('active-menu')) {
+                if (!target.classList.contains('close-btn') && target.closest('a') !== null) {
+                    getScroll(event);
+                }
                 hendlerMenu();
             }
-                      
+            if (target.closest('main') !== null && target.closest('a')) {
+                getScroll(event);
+            }
         });
-    };   
-    
+    };
+
     toggleMenu();
 
     //popup
-    const togglePopUp = () =>{
-        const popup=document.querySelector('.popup'),
+    const togglePopUp = () => {
+        const popup = document.querySelector('.popup'),
             popupContent = document.querySelector('.popup-content'),
-            popupBtn=document.querySelectorAll('.popup-btn');
-            
+            popupBtn = document.querySelectorAll('.popup-btn');
+
         let amimationInterval;
         let persent = 0;
         popupContent.style.top = 0;
-        function animation() { 
-            persent++;            
-            if(persent===50){
-                clearInterval(amimationInterval);                
+
+        function animation() {
+            persent++;
+            if (persent === 50) {
+                clearInterval(amimationInterval);
             }
-            popupContent.style.top=`${persent/5}%`;
-            
+            popupContent.style.top = `${persent/5}%`;
+
         }
-        
-        popup.addEventListener('click', (event)=>{
-            let target= event.target;
-            if (target.classList.contains('popup-close')){
+
+        popup.addEventListener('click', (event) => {
+            let target = event.target;
+            if (target.classList.contains('popup-close')) {
                 popup.style.display = 'none';
                 persent = 0;
-            }else{
-                target = target.closest('.popup-content');               
-                if(target===null){
+            } else {
+                target = target.closest('.popup-content');
+                if (target === null) {
                     popup.style.display = 'none';
                     persent = 0;
                 }
             }
-            
+
         });
-        
-        popupBtn.forEach((elem)=>{
-            elem.addEventListener('click', ()=>{
-                popup.style.display='block';
-                if(screen.width>768){
-                     amimationInterval = setInterval(animation, 10);
+
+        popupBtn.forEach((elem) => {
+            elem.addEventListener('click', () => {
+                popup.style.display = 'block';
+                if (screen.width > 768) {
+                    amimationInterval = setInterval(animation, 10);
                     animation();
                 }
-               
+
             });
         });
-      
-        
+
+
     };
     togglePopUp();
 
@@ -122,31 +160,31 @@ window.addEventListener('DOMContentLoaded',function(){
     const tabs = () => {
         const tabHeader = document.querySelector('.service-header'),
             tab = tabHeader.querySelectorAll('.service-header-tab'),
-            tabContent=document.querySelectorAll('.service-tab');
+            tabContent = document.querySelectorAll('.service-tab');
 
-        const toggleTabContent = (index) =>{
-            for(let i=0; i<tabContent.length;i++){
-                if(index===i){
+        const toggleTabContent = (index) => {
+            for (let i = 0; i < tabContent.length; i++) {
+                if (index === i) {
                     tab[i].classList.add('active');
                     tabContent[i].classList.remove('d-none');
-                }else{
+                } else {
                     tab[i].classList.remove('active');
                     tabContent[i].classList.add('d-none');
                 }
             }
         };
-        tabHeader.addEventListener('click', (event)=>{
-            let target=event.target;
-            target=target.closest('.service-header-tab');
-            
-            if (target.classList.contains('service-header-tab')){
-                tab.forEach((item,i)=>{
-                    if(item===target){
+        tabHeader.addEventListener('click', (event) => {
+            let target = event.target;
+            target = target.closest('.service-header-tab');
+
+            if (target.classList.contains('service-header-tab')) {
+                tab.forEach((item, i) => {
+                    if (item === target) {
                         toggleTabContent(i);
                     }
                 });
             }
-            
+
         });
     };
     tabs();
@@ -243,21 +281,21 @@ window.addEventListener('DOMContentLoaded',function(){
     slider();
 
     //команда
-    const command =()=>{
+    const command = () => {
         const command = document.querySelector('.command');
         let tmpImg;
-        command.addEventListener('mouseover', (event)=>{
-             if (event.target.closest('.row')){
+        command.addEventListener('mouseover', (event) => {
+            if (event.target.closest('.row')) {
                 tmpImg = event.target.src;
                 event.target.src = event.target.dataset.img;
-             }                   
+            }
         });
 
         command.addEventListener('mouseout', (event) => {
-             if (event.target.closest('.row')) {
+            if (event.target.closest('.row')) {
                 event.target.dataset.img = event.target.src;
                 event.target.src = tmpImg;
-             }
+            }
         });
 
     };
@@ -309,7 +347,7 @@ window.addEventListener('DOMContentLoaded',function(){
                 dayValue *= 1.5;
             }
             if (!!typeValue && !!squareValue) {
-                sum = parseInt(price * typeValue * squareValue * countValue * dayValue);                
+                sum = parseInt(price * typeValue * squareValue * countValue * dayValue);
                 animationSum();
             }
 
