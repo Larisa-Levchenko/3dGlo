@@ -371,7 +371,7 @@ window.addEventListener('DOMContentLoaded', function () {
             placeholderName = document.querySelectorAll('[placeholder="Ваше имя"]'),
             placeholderText = document.querySelector('[placeholder="Ваше сообщение"]'),
             placeholderPhone = document.querySelectorAll('[placeholder="Номер телефона"]');
-        console.log(placeholderPhone);
+        
         placeholderName.forEach((item)=>{
             item.addEventListener('input', () => {                
                 item.value = item.value.replace(/[^^А-Яа-я ]/i, '');
