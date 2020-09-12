@@ -371,9 +371,18 @@ window.addEventListener('DOMContentLoaded', function () {
             placeholderName = document.querySelectorAll('[placeholder="Ваше имя"]'),
             placeholderText = document.querySelector('[placeholder="Ваше сообщение"]'),
             placeholderPhone = document.querySelectorAll('[placeholder="Номер телефона"]');
+
+        placeholderName.forEach((item) => {
+            item.autocomplete='off';
+        });
+
+        placeholderPhone.forEach((item) => {
+            item.autocomplete = 'off';
+            item.pattern = "[+][0-9]{11}";
+        });
         
         placeholderName.forEach((item)=>{
-            item.addEventListener('input', () => {                
+            item.addEventListener('input', () => { 
                 item.value = item.value.replace(/[^^А-Яа-я ]/i, '');
             });   
         });
@@ -383,8 +392,8 @@ window.addEventListener('DOMContentLoaded', function () {
         });
 
         placeholderPhone.forEach((item) => {
-            item.addEventListener('input', () => {
-                item.value = item.value.replace(/[^0-9+]/i, '');              
+            item.addEventListener('input', () => {              
+                item.value = item.value.replace(/[^0-9+]/i, '');
             });
         });
                
