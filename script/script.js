@@ -397,61 +397,49 @@ window.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        const postDate = body => {
-            return new Promise((resolve, reject) => {
-                const request = new XMLHttpRequest();
-                request.addEventListener('readystatechange', () => {
-                    if (request.readyState !== 4) {
-                        return;
-                    }
-                    if (request.status === 200) {
-                        resolve();
-                    } else {
-                        console.log("ghjk");
-                        reject();
-                    }
-                });
-                request.open('POST', './server.php');
-                request.setRequestHeader('Content-Type', 'multipart/form-data');
-                request.send(JSON.stringify(body));
+        const postDate = (date) => {
+            return fetch("./server.php",{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(date)
             });
-
-
+              
         };
+
         const emptyStr = () => {
-            let formMessage = document.querySelector('.create-message');
-            formMessage.remove();
+          let formMessage = document.querySelector(".create-message");
+          formMessage.remove();
         };
 
         forms.forEach((form) => {
-            form.addEventListener("submit", (event) => {
-                event.preventDefault();
+          form.addEventListener("submit", (event) => {
+            event.preventDefault();
 
-                const createMessage = document.createElement("div");
-                createMessage.textContent = loadMessage;
-                createMessage.classList.add('create-message');
-                createMessage.style.cssText = "font-size: 2rem";
-                createMessage.style.cssText = "color: #fff";
-                form.appendChild(createMessage);
+            const createMessage = document.createElement("div");
+            createMessage.textContent = loadMessage;
+            createMessage.classList.add("create-message");
+            createMessage.style.cssText = "font-size: 2rem";
+            createMessage.style.cssText = "color: #fff";
+            form.appendChild(createMessage);
 
-                const formData = new FormData(form);
+            const formData = new FormData(form);
 
-                for (let i = 0; i < form.length - 1; i++) {
-                    form[i].value = "";
-                }
+            for (let i = 0; i < form.length - 1; i++) {
+              form[i].value = "";
+            }
 
-                let body = {};
-                formData.forEach((value, key) => {
-                    body[key] = value;
-                });
-                postDate(body)
-                    .then(() => createMessage.textContent = successMessage)
-                    .catch(() => createMessage.textContent = errorMessage);
-
-                setTimeout(emptyStr, 8000);
-
+            let body = {};
+            formData.forEach((value, key) => {
+              body[key] = value;
             });
+            postDate(body)
+              .then(() => (createMessage.textContent = successMessage))
+              .catch(() => (createMessage.textContent = errorMessage));
 
+            setTimeout(emptyStr, 8000);
+          });
         });
 
     };
