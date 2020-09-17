@@ -48,8 +48,8 @@ const calc = (price = 100) => {
     }
   };
 
-  calcBlock.addEventListener("change", () => {
-    if (event.target.matches("select") || event.target.matches("input")) {
+  calcBlock.addEventListener("change", () => {   
+    if (event.target.matches("select") || event.target.matches("input")) {      
       countSum();
     }
   });
