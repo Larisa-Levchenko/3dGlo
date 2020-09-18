@@ -19,10 +19,10 @@ const calc = (price = 100) => {
 
   const animationSum = () => {
     if (total.textContent < sum) {
-      if (+total.textContent + 100 > sum) {
+      if (+total.textContent + 500 > sum) {
         total.textContent = sum;
       } else {
-        total.textContent = +total.textContent + 100;
+        total.textContent = +total.textContent + 500;
       }
       animation = window.requestAnimationFrame(animationSum);
     }
@@ -44,7 +44,12 @@ const calc = (price = 100) => {
     }
     if (!!typeValue && !!squareValue) {
       sum = parseInt(price * typeValue * squareValue * countValue * dayValue);
-      animationSum();
+      if(sum<50000){
+        animationSum();
+      }else{
+        total.textContent = sum;
+      }
+      
     }
   };
 

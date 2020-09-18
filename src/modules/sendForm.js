@@ -26,7 +26,7 @@ const sendForm = () => {
   });
 
   placeholderText.addEventListener("input", () => {
-    placeholderText.value = placeholderText.value.replace(/[^^А-Яа-я ]/i, "");
+    placeholderText.value = placeholderText.value.replace(/[^^А-Яа-я\W ]/i, "");
   });
 
   placeholderPhone.forEach((item) => {
