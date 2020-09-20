@@ -424,7 +424,14 @@ window.addEventListener('DOMContentLoaded', function () {
                 event.preventDefault();                
       
                 const createMessage = document.createElement("div");
-                createMessage.textContent = loadMessage;
+                createMessage.insertAdjacentHTML(
+                        "beforeend", `<div class='sk-wave'>
+      <div class='sk-rect sk-rect-1'></div>
+      <div class='sk-rect sk-rect-2'></div>
+      <div class='sk-rect sk-rect-3'></div>
+      <div class='sk-rect sk-rect-4'></div>
+      <div class='sk-rect sk-rect-5'></div>
+    </div>`);
                 createMessage.classList.add('create-message');
                 createMessage.style.cssText = "font-size: 2rem";
                 createMessage.style.cssText = "color: #fff";
